@@ -1,4 +1,4 @@
-const CACHE_NAME = "chat-gbd-shell-v7";
+const CACHE_NAME = "chat-gbd-shell-v8";
 const scope = new URL(self.registration.scope);
 const SHELL_URL = new URL("index.html", scope).href;
 const INSTALL_FILES = ["/manifest.json", "/icon-192.png", "/icon-512.png", "/favicon.png", "/apple-touch-icon.png"];
@@ -45,6 +45,19 @@ self.addEventListener("fetch", (event) => {
     const refresh = cache.then(refreshShell);
     event.waitUntil(refresh.catch(() => {}));
     event.respondWith(cache.then(async (shellCache) => (await shellCache.match(SHELL_URL)) || refresh));
+  } else if (url.href === new URL("manifest.json", scope).href) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+        const response = await fetch(event.request, { cache: "no-cache" });
+        if (response.ok) { await cache.put(event.request, response.clone()); return response; }
+        return (await cache.match(event.request)) || response;
+      } catch (error) {
+        const cached = await cache.match(event.request);
+        if (cached) return cached;
+        throw error;
+      }
+    })());
   } else if (url.pathname.startsWith(scope.pathname) && (relativePath.startsWith("/assets/") || INSTALL_FILES.includes(relativePath))) {
     event.respondWith(caches.match(event.request, { cacheName: CACHE_NAME }).then((cached) => cached || fetch(event.request)));
   }
