@@ -3,7 +3,7 @@
   "short_name": "Chat GBD",
   "description": "A conversational assistant with voice features.",
   "start_url": "./",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
