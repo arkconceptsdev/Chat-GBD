@@ -1,4 +1,4 @@
-const CACHE_NAME = "chat-gbd-shell-v19";
+const CACHE_NAME = "chat-gbd-shell-v20";
 const scope = new URL(self.registration.scope);
 const SHELL_URL = new URL("index.html", scope).href;
 const INSTALL_FILES = ["/manifest.json", "/icon-192.png", "/icon-512.png", "/favicon.png", "/apple-touch-icon.png"];
